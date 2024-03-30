@@ -373,21 +373,23 @@ done about this - except not using SloppyFocus in the pager.
 
 == SENDING COMMANDS
 
-_FvwmPager_ listens for the following commands while it is running, by using
-the _SendToModule_ command:
+Using the _SendToModule_ command, _FvwmPager_ can be sent the following
+list of commands: *Monitor*, *DeskLabels*, *NoDeskLabels*, *MonitorLabels*,
+and *NoMonitorLabels*. Each command functions identically to its
+configuration option above, changing the configuration of the running pager.
+Note any configuration changes are for the running instance only, to make
+any changes permanent, update the fvwm config file.
 
-*Monitor*::
-Configures the specified _FvwmPager_ to track windows on a specific monitor.
-For example:
-+
+For example, you can tell a running instance of _FvwmPager_ to track a
+specific monitor by sending it the following command:
+
 ....
-SendToModule FP Monitor RANDRNAME
+SendToModule FvwmPager Monitor RANDRNAME
 ....
-+
-Where _RANDRNAME_ is a valid monitor name.
-+
-Note that the special value of *none* can be used to track all windows on all
-monitors.
+
+This will either change which monitor is being shown or tell the pager to
+only show a specific monitor. Note that the special value of *none* will
+show all windows on all monitors.
 
 == AUTHOR
 

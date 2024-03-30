@@ -641,10 +641,21 @@ void process_message( FvwmPacket* packet )
 	char *token;
 	char *rest = GetNextToken(this, &token);
 
-	if ((strcmp(token, "Monitor") == 0) && (rest != NULL)) {
+	if (rest != NULL && StrEquals(token, "Monitor")) {
 		update_monitor_to_track(rest);
-		ReConfigure();
+	} else if (StrEquals(token, "DeskLabels")) {
+		use_desk_label = True;
+	} else if (StrEquals(token, "NoDeskLabels")) {
+		use_desk_label = False;
+	} else if (StrEquals(token, "MonitorLabels")) {
+		use_monitor_label = True;
+	} else if (StrEquals(token, "NoMonitorLabels")) {
+		use_monitor_label = False;
+	} else {
+		break;
 	}
+	set_desk_size(true);
+	ReConfigure();
 	break;
     }
     default:
