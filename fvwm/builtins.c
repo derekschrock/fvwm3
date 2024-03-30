@@ -2710,24 +2710,38 @@ void CMD_Quit(F_CMD_ARGS)
 	return;
 }
 
-void CMD_Echo(F_CMD_ARGS)
+static void do_echo_log(char *name, char *msg)
 {
 	int len;
 
-	if (!action)
+	if (!msg)
 	{
-		action = "";
+		msg = "";
 	}
-	len = strlen(action);
+	len = strlen(msg);
 	if (len != 0)
 	{
-		if (action[len-1]=='\n')
+		if (msg[len-1]=='\n')
 		{
-			action[len-1]='\0';
+			msg[len-1]='\0';
 		}
 	}
+	fvwm_debug(name, "%s\n", msg);
+
+	return;
+}
+
+void CMD_Log(F_CMD_ARGS)
+{
+	do_echo_log(__func__, action);
+
+	return;
+}
+
+void CMD_Echo(F_CMD_ARGS)
+{
 	BroadcastName(MX_ECHO, -1, -1, -1, action);
-	fvwm_debug(__func__, "%s\n", action);
+	do_echo_log(__func__, action);
 
 	return;
 }

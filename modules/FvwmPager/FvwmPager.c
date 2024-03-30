@@ -260,9 +260,8 @@ int main(int argc, char **argv)
 
   if(argc  < 6)
     {
-      fvwm_debug(__func__, "%s Version %s should only be executed by fvwm!\n",
-                 MyName,
-                 VERSION);
+      fprintf(stderr, "%s Version %s should only be executed by fvwm!\n",
+	      MyName, VERSION);
       exit(1);
     }
 
@@ -389,7 +388,7 @@ int main(int argc, char **argv)
   /* Initialize X connection */
   if (!(dpy = XOpenDisplay(display_name)))
     {
-      fvwm_debug(__func__, "%s: can't open display %s", MyName,
+      fvwm_module_debug(fd, MyName, __func__, "Can't open display %s",
                  XDisplayName(display_name));
       exit (1);
     }
@@ -505,7 +504,7 @@ int main(int argc, char **argv)
     if (!is_pointer_grabbed)
     {
       XBell(dpy, 0);
-      fvwm_debug(__func__,
+      fvwm_module_debug(fd, MyName, __func__,
                  "%s: could not grab pointer in transient mode. exiting.\n",
                  MyName);
       exit(1);
@@ -521,7 +520,7 @@ int main(int argc, char **argv)
 #ifdef FVWM_DEBUG_MSGS
   if ( isTerminated )
   {
-    fvwm_debug(__func__, "%s: Received signal: exiting...\n", MyName);
+    fvwm_module_debug(fd, MyName, __func__, "Received signal: exiting...\n");
   }
 #endif
 
@@ -673,7 +672,7 @@ void handle_config_win_package(PagerWindow *t,
 	if (t->w != None && t->w != cfgpacket->w)
 	{
 		/* Should never happen */
-		fvwm_debug(__func__,
+		fvwm_module_debug(fd, MyName, __func__,
 			   "%s: Error: Internal window list corrupt\n",MyName);
 		/* might be a good idea to exit here */
 		return;
@@ -1941,19 +1940,22 @@ ImagePath = NULL;
 	    next = SkipSpaces(next, NULL, 0);
 
 	    if (next == NULL) {
-		    fvwm_debug(__func__, "FvwmPager: no monitor name given "
+		    fvwm_module_debug(fd, MyName, __func__,
+				    "FvwmPager: no monitor name given "
 				    "using current monitor\n");
 		    /* m already set... */
 		    monitor_to_track = fxstrdup(tm->si->name);
 		    continue;
 	    }
 	    if ((m = fpmonitor_by_name(next)) == NULL) {
-		    fvwm_debug(__func__, "FvwmPager: monitor '%s' not found "
-                               "using current monitor", next);
+		    fvwm_module_debug(fd, MyName, __func__,
+				    "FvwmPager: monitor '%s' not found "
+				    "using current monitor", next);
 		    monitor_to_track = fxstrdup(tm->si->name);
 		    continue;
 	    }
-	    fvwm_debug(__func__, "Assigning monitor: %s\n", m->m->si->name);
+	    fvwm_module_debug(fd, MyName, __func__,
+			    "Assigning monitor: %s\n", m->m->si->name);
 	    monitor_to_track = fxstrdup(m->m->si->name);
 	    if (preferred_monitor != NULL)
 		free(preferred_monitor);
@@ -2423,10 +2425,8 @@ ImagePath = NULL;
       sscanf(arg1, "%d", &BalloonYOffset);
       if (BalloonYOffset == 0)
       {
-	fvwm_debug(__func__,
-                   "%s: Warning:"
-                   " you're not allowed BalloonYOffset 0; defaulting to +3\n",
-                   MyName);
+	fvwm_module_debug(fd, MyName, __func__,
+                   "You're not allowed BalloonYOffset 0; defaulting to +3\n");
 	/* we don't allow yoffset of 0 because it allows direct transit from
 	 * pager window to balloon window, setting up a LeaveNotify/EnterNotify
 	 * event loop */
@@ -2457,7 +2457,7 @@ ImagePath = NULL;
 	  m->virtual_scr.VxPages = m->virtual_scr.VWidth / fpmonitor_get_all_widths();
 	  m->virtual_scr.VyPages = m->virtual_scr.VHeight / fpmonitor_get_all_heights();
 
-	  fvwm_debug(__func__,
+	  fvwm_module_debug(fd, MyName, __func__,
 			  "%s: VxMax: %d, VyMax: %d, VWidth: %d, Vheight: %d, "
 			  "VxPages: %d, VyPages: %d\n", m->m->si->name,
 			  m->virtual_scr.VxMax, m->virtual_scr.VyMax, m->virtual_scr.VWidth,

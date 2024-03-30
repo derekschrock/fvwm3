@@ -30,6 +30,7 @@
 #include "fvwmlib.h"
 #include "getpwuid.h"
 #include "log.h"
+#include "Module.h"
 
 static char	*log_file_name;
 static FILE	*log_file;
@@ -156,6 +157,46 @@ log_vwrite(const char *func, const char *msg, va_list ap)
 	free(fmt);
 }
 
+/* Send and echo command to fvwm to write the log message. */
+static void
+log_vwrite_module(int *fd, const char *name, const char *func,
+		  const char *msg, va_list ap)
+{
+	char		*cmd, *fmt, *sep = ":", *cmd_sep = ".";
+	struct timeval	 tv;
+
+	if (fd == NULL)
+		return;
+
+	if (name == NULL) {
+		name = "";
+		cmd_sep = "";
+	}
+
+	if (func == NULL) {
+		func = "";
+		sep = "";
+	}
+
+	if (vasprintf(&fmt, msg, ap) == -1)
+		exit(1);
+	if (xasprintf(&cmd, "Log %s%s%s%s %s",
+		      name, cmd_sep, func, sep, fmt) == -1)
+		exit(1);
+
+	/* Remove any new line, let 'Echo' add it. */
+	if (fmt[strlen(cmd) - 1] == '\n')
+		fmt[strlen(cmd) - 1] = '\0';
+
+	//SendText(fd, cmd, 0);
+	//fflush(fd);
+	fprintf(stderr, "%s", cmd);
+	fflush(stderr);
+
+	free(fmt);
+	free(cmd);
+}
+
 /* Log a debug message. */
 void
 fvwm_debug(const char *func, const char *msg, ...)
@@ -164,5 +205,17 @@ fvwm_debug(const char *func, const char *msg, ...)
 
 	va_start(ap, msg);
 	log_vwrite(func, msg, ap);
+	va_end(ap);
+}
+
+/* Log a debug message from a module. */
+void
+fvwm_module_debug(int *fd, const char *name,
+		  const char *func, const char *msg, ...)
+{
+	va_list	ap;
+
+	va_start(ap, msg);
+	log_vwrite_module(fd, name, func, msg, ap);
 	va_end(ap);
 }

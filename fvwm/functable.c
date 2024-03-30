@@ -213,7 +213,7 @@ const func_t func_table[] =
 	/* - Operate on the next window in the specified direction */
 
 	CMD_ENT("echo", CMD_Echo, F_ECHO, 0, 0),
-	/* - Print message to stderr, mainly for debugging */
+	/* - Print message to logfile, and send response to modules */
 
 	CMD_ENT("echofuncdefinition", CMD_EchoFuncDefinition,
 		F_ECHO_FUNC_DEFINITION, 0, 0),
@@ -335,6 +335,9 @@ const func_t func_table[] =
 
 	CMD_ENT("localepath", CMD_LocalePath, F_LOCALE_PATH, 0, 0),
 	/* - Directories/domains to search for locale data */
+
+	CMD_ENT("log", CMD_Log, F_LOG, 0, 0),
+	/* - Print message to logfile, used by modules to send log messages */
 
 	CMD_ENT("lower", CMD_Lower, F_LOWER,
 		FUNC_NEEDS_WINDOW, CRS_SELECT),

@@ -161,6 +161,7 @@ enum
 	F_FLIP_FOCUS,
 	F_FOCUS,
 	F_ICONIFY,
+	F_LOG,
 	F_LOWER,
 	F_MAXIMIZE,
 	F_MOVE,
@@ -283,6 +284,7 @@ void CMD_Key(F_CMD_ARGS);
 void CMD_KillModule(F_CMD_ARGS);
 void CMD_Layer(F_CMD_ARGS);
 void CMD_LocalePath(F_CMD_ARGS);
+void CMD_Log(F_CMD_ARGS);
 void CMD_Lower(F_CMD_ARGS);
 void CMD_Maximize(F_CMD_ARGS);
 void CMD_Menu(F_CMD_ARGS);
